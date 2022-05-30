@@ -33,12 +33,13 @@ package scodec.bits
 import org.scalacheck.Prop.forAll
 import Arbitraries._
 
-class CrcJvmTest extends BitsSuite {
+class CrcJvmNativeTest extends BitsSuite {
 
-  property("crc32 is consistent with java.util.zip.CRC32") {
+  property("crc32 is consistent with java.util.zip.CRC32".only) {
     forAll { (b: ByteVector) =>
       assert(crc.crc32(b.bits).bytes == {
         val c = new java.util.zip.CRC32
+        println(b)
         c.update(b.toArray)
         ByteVector.fromLong(c.getValue, size = 4)
       })
